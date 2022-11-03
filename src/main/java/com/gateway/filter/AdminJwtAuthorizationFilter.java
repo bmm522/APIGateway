@@ -61,7 +61,7 @@ public class AdminJwtAuthorizationFilter extends AbstractGatewayFilterFactory<Ad
 				return notiStatus(exchange, "Don`t exist ROLE_ADMIN ",HttpStatus.UNAUTHORIZED);
 			}
 			// 서명이 정상적으로 됨
-		
+			
 			return chain.filter(exchange);
 		});	
 	}
@@ -87,9 +87,7 @@ public class AdminJwtAuthorizationFilter extends AbstractGatewayFilterFactory<Ad
 					.providerId(JWT.require(Algorithm.HMAC512(JwtProperties.SECRET+refreshToken)).build().verify(jwtToken).getClaim("providerId").asString())
 					.createDate(JWT.require(Algorithm.HMAC512(JwtProperties.SECRET+refreshToken)).build().verify(jwtToken).getClaim("createDate").asString())
 					.build();
-		
-
-					
+							
 	}
 	
 	

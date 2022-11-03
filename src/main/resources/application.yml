@@ -3,16 +3,20 @@ server:
 
 eureka:
   client:
-    register-with-eureka: false
-    fetch-registry: false
+#    eureka-server-port: 8761
+    register-with-eureka:  true
+    fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8761/eureka
-
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    hostname: gateway-api
 
 
 spring:
+#  main:
+#    web-application-type: reactive
   application:
-    name: gateway-service
+    name: gatewayservice
   cloud:
     gateway:
 #      globalcors:
@@ -35,9 +39,9 @@ spring:
 #              - DELETE
       routes:
         - id: first-service
-          uri: http://localhost:8080/register
+          uri: http://localhost:8080/login-api
           predicates:
-            - Path=/register/**
+            - Path=/login-api/**
         - id: second-service
           uri: http://localhost:8080/login
           predicates:
@@ -48,6 +52,14 @@ spring:
           - Path=/test/**
           filters:
           - UserJwtAuthorizationFilter
+#        - id: google-service
+#          uri: http://localhost:8080/login/oauth2/code/google
+#          predicates:
+#          - Path=/loginapi/google/**          
+#        - id: google-service2
+#          uri: http://localhost:8081/test
+#          predicates:
+#          - Path=/google/test/**               
 #        - id: sub-service
 #          uri: http://localhost:8000/login
 #          predicates:
@@ -64,4 +76,3 @@ spring:
 #          uri: http://localhost:8082/
 #          predicates:
 #            - Path=/second-service/**
-
