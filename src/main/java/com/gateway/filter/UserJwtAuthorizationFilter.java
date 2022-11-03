@@ -21,14 +21,14 @@ import reactor.core.publisher.Mono;
 
 @Component
 @Slf4j
-public class UserJwtAuthorizationFilter extends AbstractGatewayFilterFactory<UserJwtAuthorizationFilter.UserJwtAuthrizaionConfig>{
+public class UserJwtAuthorizationFilter extends AbstractGatewayFilterFactory<UserJwtAuthorizationFilter.UserJwtAuthorizationConfig>{
 	
 	public UserJwtAuthorizationFilter() {
-		super(UserJwtAuthrizaionConfig.class);
+		super(UserJwtAuthorizationConfig.class);
 	}
 	
 	@Override
-	public GatewayFilter apply(UserJwtAuthrizaionConfig config) {
+	public GatewayFilter apply(UserJwtAuthorizationConfig config) {
 		return ((exchange, chain) -> {
 			
 			ServerHttpRequest request = exchange.getRequest();
@@ -72,23 +72,27 @@ public class UserJwtAuthorizationFilter extends AbstractGatewayFilterFactory<Use
 	
 	private User getUser(String jwtToken, String refreshToken) {
 		return User.UserBuilder()
-					.username(JWT.require(Algorithm.HMAC512(JwtProperties.SECRET+refreshToken)).build().verify(jwtToken).getClaim("username").asString())
-					.nickname(JWT.require(Algorithm.HMAC512(JwtProperties.SECRET+refreshToken)).build().verify(jwtToken).getClaim("nickname").asString())
-					.email(JWT.require(Algorithm.HMAC512(JwtProperties.SECRET+refreshToken)).build().verify(jwtToken).getClaim("email").asString())
-					.birth(JWT.require(Algorithm.HMAC512(JwtProperties.SECRET+refreshToken)).build().verify(jwtToken).getClaim("birth").asString())
-					.phone(JWT.require(Algorithm.HMAC512(JwtProperties.SECRET+refreshToken)).build().verify(jwtToken).getClaim("phone").asString())
-					.address(JWT.require(Algorithm.HMAC512(JwtProperties.SECRET+refreshToken)).build().verify(jwtToken).getClaim("address").asString())
-					.roles(JWT.require(Algorithm.HMAC512(JwtProperties.SECRET+refreshToken)).build().verify(jwtToken).getClaim("roles").asString())
-					.provider(JWT.require(Algorithm.HMAC512(JwtProperties.SECRET+refreshToken)).build().verify(jwtToken).getClaim("provider").asString())
-					.providerId(JWT.require(Algorithm.HMAC512(JwtProperties.SECRET+refreshToken)).build().verify(jwtToken).getClaim("providerId").asString())
-					.createDate(JWT.require(Algorithm.HMAC512(JwtProperties.SECRET+refreshToken)).build().verify(jwtToken).getClaim("createDate").asString())
+					.username(getUserInfoFromJwt(refreshToken, jwtToken, "username"))
+					.nickname(getUserInfoFromJwt(refreshToken, jwtToken, "nickname"))
+					.email(getUserInfoFromJwt(refreshToken, jwtToken, "email"))
+					.birth(getUserInfoFromJwt(refreshToken, jwtToken, "birth"))
+					.phone(getUserInfoFromJwt(refreshToken, jwtToken, "phone"))
+					.address(getUserInfoFromJwt(refreshToken, jwtToken, "address"))
+					.roles(getUserInfoFromJwt(refreshToken, jwtToken, "roles"))
+					.provider(getUserInfoFromJwt(refreshToken, jwtToken, "provider"))
+					.providerId(getUserInfoFromJwt(refreshToken, jwtToken, "providerId"))
+					.createDate(getUserInfoFromJwt(refreshToken, jwtToken, "createDate"))
 					.build();
 		
 
 					
 	}
-	
-	public static class UserJwtAuthrizaionConfig{
+
+	private String getUserInfoFromJwt(String refreshToken, String jwtToken, String userInfo) {
+		return JWT.require(Algorithm.HMAC512(JwtProperties.SECRET + refreshToken)).build().verify(jwtToken).getClaim(userInfo).asString();
+	}
+
+	public static class UserJwtAuthorizationConfig {
 		
 	}
 
