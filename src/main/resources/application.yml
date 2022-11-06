@@ -19,24 +19,24 @@ spring:
     name: gatewayservice
   cloud:
     gateway:
-#      globalcors:
-#       corsConfigurations:
-#          '[/**]':
-#            allowedOrigins: "http://127.0.0.1:5501/"
-#            allow-credentials: true   #추가
-#            allowedHeaders:
-#              - x-requested-with
-#              - authorization
-#              - content-type
-#              - credential
-#              - X-AUTH-TOKEN
-#              - X-CSRF-TOKEN
-#            allowedMethods:
-#              - POST
-#              - GET
-#              - PUT
-#              - OPTIONS
-#              - DELETE
+      globalcors:
+       corsConfigurations:
+          '[/**]':
+            allowedOrigins: "http://127.0.0.1:5501/"
+            allow-credentials: true   #추가
+            allowedHeaders:
+              - x-requested-with
+              - authorization
+              - content-type
+              - credential
+              - X-AUTH-TOKEN
+              - X-CSRF-TOKEN
+            allowedMethods:
+              - POST
+              - GET
+              - PUT
+              - OPTIONS
+              - DELETE
       routes:
         - id: first-service
           uri: http://localhost:8080/login-api
@@ -47,11 +47,11 @@ spring:
           predicates:
           - Path=/login/**
         - id: third-service
-          uri: http://localhost:8081/test
+          uri: http://localhost:8081/study-api
           predicates:
-          - Path=/test/**
-          filters:
-          - UserJwtAuthorizationFilter
+          - Path=/study-api/**
+#          filters:
+#          - UserJwtAuthorizationFilter
 #        - id: google-service
 #          uri: http://localhost:8080/login/oauth2/code/google
 #          predicates:
