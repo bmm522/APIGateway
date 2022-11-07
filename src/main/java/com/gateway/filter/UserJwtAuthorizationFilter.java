@@ -34,9 +34,17 @@ public class UserJwtAuthorizationFilter extends AbstractGatewayFilterFactory<Use
 			ServerHttpRequest request = exchange.getRequest();
 			ServerHttpResponse response = exchange.getResponse();
 			
-			String jwtHeader = request.getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
-			String serverHeader = request.getHeaders().get("RefreshToken").get(0);
+			String jwtHeader = null;
+			String serverHeader = null;
 			
+			
+			//헤더에 토큰이 있는지 없는지 화인
+			try {
+				jwtHeader = request.getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
+				serverHeader = request.getHeaders().get("RefreshToken").get(0);
+			} catch(NullPointerException e) {
+				return notiStatus(exchange, "Not Found your tokken", HttpStatus.UNAUTHORIZED);
+			}
 			//JWT 토큰을 검증을 해서 정상적인 사용자인지 확인
 			if(jwtHeader == null || !jwtHeader.startsWith(JwtProperties.JWT_PREFIX)) {
 				return notiStatus(exchange, "Not found authorization header", HttpStatus.UNAUTHORIZED);

@@ -50,8 +50,8 @@ spring:
           uri: http://localhost:8081/study-api
           predicates:
           - Path=/study-api/**
-#          filters:
-#          - UserJwtAuthorizationFilter
+          filters:
+          - UserJwtAuthorizationFilter
 #        - id: google-service
 #          uri: http://localhost:8080/login/oauth2/code/google
 #          predicates:
