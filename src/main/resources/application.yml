@@ -26,7 +26,7 @@ spring:
             allow-credentials: true   #추가
             allowedHeaders:
               - x-requested-with
-              - authorization
+              - Authorization
               - content-type
               - credential
               - X-AUTH-TOKEN
@@ -37,6 +37,9 @@ spring:
               - PUT
               - OPTIONS
               - DELETE
+            exposedHeaders:
+              - Authorization
+              - RefreshToken 
       routes:
         - id: first-service
           uri: http://localhost:8080/login-api
@@ -46,12 +49,15 @@ spring:
           uri: http://localhost:8080/login
           predicates:
           - Path=/login/**
+#          - Header= Authorization
+#          filters:
+#          - LoginFilter      
         - id: third-service
           uri: http://localhost:8081/study-api
           predicates:
           - Path=/study-api/**
-          filters:
-          - UserJwtAuthorizationFilter
+#          filters:
+#          - UserJwtAuthorizationFilter
 #        - id: google-service
 #          uri: http://localhost:8080/login/oauth2/code/google
 #          predicates:
